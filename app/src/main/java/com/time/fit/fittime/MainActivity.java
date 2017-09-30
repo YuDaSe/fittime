@@ -1,9 +1,12 @@
 package com.time.fit.fittime;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,12 +27,19 @@ public class MainActivity extends AppCompatActivity {
 
     private MediaPlayer m = new MediaPlayer();
     private final MainActivity context = this;
-    private final Integer SET_TIME = 5; // seconds
-    private final Integer REST_TIME = 5; // seconds
-    private final Integer PREPARE_TIME = 5; // seconds
+    private Integer SET_TIME = 5; // seconds
+    private Integer REST_TIME = 5; // seconds
+    private Integer PREPARE_TIME = 5; // seconds
     private TextView time_left;
     private RelativeLayout activityMainView;
     private CountDownTimer cdt;
+
+    public int getIntegerPref(String key) {
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        String value = prefs.getString(key, null);
+        return value == null ? -1 : Integer.valueOf(value);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -47,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.settings:
                 // newGame();
                 Intent settingsActivityIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                settingsActivityIntent.putExtra( SettingsActivity.EXTRA_SHOW_FRAGMENT,
+                        SettingsActivity.GeneralPreferenceFragment.class.getName() );
+                settingsActivityIntent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
                 startActivity(settingsActivityIntent);
                 return true;
             default:
@@ -85,8 +98,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
-//
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SET_TIME = getIntegerPref("SET_TIME");
+        REST_TIME = getIntegerPref("REST_TIME");
+        PREPARE_TIME = getIntegerPref("PREPARE_TIME");
     }
 
     private void startPrepare() {
