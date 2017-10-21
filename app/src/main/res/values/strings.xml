@@ -67,6 +67,11 @@
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
+    <plurals name="pref_summary_value">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
 
