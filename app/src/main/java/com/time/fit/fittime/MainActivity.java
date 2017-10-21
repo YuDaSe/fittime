@@ -34,11 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout activityMainView;
     private CountDownTimer cdt;
 
-    public int getIntegerPref(String key) {
+    public int getIntegerPref(String key, int defaultValue) {
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(this);
         String value = prefs.getString(key, null);
-        return value == null ? -1 : Integer.valueOf(value);
+        return value == null ? defaultValue : Integer.valueOf(value);
     }
 
     @Override
@@ -104,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        SET_TIME = getIntegerPref("SET_TIME");
-        REST_TIME = getIntegerPref("REST_TIME");
-        PREPARE_TIME = getIntegerPref("PREPARE_TIME");
+        SET_TIME = getIntegerPref("SET_TIME", SET_TIME);
+        REST_TIME = getIntegerPref("REST_TIME", REST_TIME);
+        PREPARE_TIME = getIntegerPref("PREPARE_TIME", PREPARE_TIME);
     }
 
     private void startPrepare() {
